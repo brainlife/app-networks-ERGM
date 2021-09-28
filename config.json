@@ -1,0 +1,8 @@
+{
+    "my_formula": "gwesp + gwdegree, constraints = ~edges, control=control.ergm(init=c(1.0,1.0,0.1,1.0), MCMLE.maxit=40)",
+    "nsim_gof": "100",
+    "source": "data/brainM.txt",
+    "num_ecov": "0",
+    "num_ncov": "0",
+    "unfiltered": "TRUE"
+}

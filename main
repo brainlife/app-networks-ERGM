@@ -1,0 +1,16 @@
+#!/bin/bash
+#PBS -l nodes=1:ppn=1
+#PBS -l vmem=6gb
+#PBS -l walltime=00:05:00
+
+my_formula=$(jq -r .my_formula config.json)
+nsim_gof=$(jq -r .nsim_gof config.json)
+source=$(jq -r .source config.json)
+num_ecov=$(jq -r .num_ecov config.json)
+num_ncov=$(jq -r .num_ncov config.json)
+unfiltered=$(jq -r .unfiltered config.json)
+
+chmod +x main.R
+Rscript main.R $my_formula $nsim_gof $source $num_ecov $num_ncov $unfiltered
+
+echo "done"

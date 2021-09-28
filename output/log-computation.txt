@@ -1,0 +1,222 @@
+
+> ## 2.2 ESTIMATION 
+> summary(bnet ~ edges + triangle + degree(1:10))
+   edges triangle  degree1  degree2  degree3  degree4  degree5  degree6  degree7  degree8  degree9 degree10 
+     274      495        1        1        3        3        9        3        2        5        5        6 
+
+> bfit <- eval(parse(text = paste("ergm(bnet ~", my_formula, ")")))
+
+> pdf("output/mcmc-diagnostic.pdf")
+
+> mcmc.diagnostics(bfit)
+Sample statistics summary:
+
+Iterations = 15089664:35274752
+Thinning interval = 8192 
+Number of chains = 1 
+Sample size per chain = 2465 
+
+1. Empirical mean and standard deviation for each variable,
+   plus standard error of the mean:
+
+                  Mean     SD Naive SE Time-series SE
+gwesp          -0.1272 25.507   0.5138         1.2146
+gwesp.decay    -0.5617 36.803   0.7413         1.3506
+gwdegree        0.2486  5.931   0.1195         0.4215
+gwdegree.decay  0.1762  7.249   0.1460         0.5862
+
+2. Quantiles for each variable:
+
+                 2.5%     25%     50%    75%  97.5%
+gwesp          -51.47 -17.076  0.3746 17.572 48.042
+gwesp.decay    -71.68 -25.977 -0.0204 25.234 71.734
+gwdegree       -12.49  -3.762  0.9069  4.738  9.923
+gwdegree.decay -16.51  -4.090  0.8081  5.676 11.044
+
+
+Are sample statistics significantly different from observed?
+                gwesp gwesp.decay  gwdegree gwdegree.decay Overall (Chi^2)
+diff.      -0.1271742  -0.5617474 0.2485809      0.1761764              NA
+test stat. -0.1047077  -0.4159335 0.5897894      0.3005546       2.3504208
+P-val.      0.9166077   0.6774587 0.5553318      0.7637542       0.6729132
+
+Sample statistics cross-correlations:
+                   gwesp gwesp.decay   gwdegree gwdegree.decay
+gwesp          1.0000000   0.9398788  0.1260281      0.4791795
+gwesp.decay    0.9398788   1.0000000 -0.0666281      0.3072145
+gwdegree       0.1260281  -0.0666281  1.0000000      0.7253697
+gwdegree.decay 0.4791795   0.3072145  0.7253697      1.0000000
+
+Sample statistics auto-correlation:
+Chain 1 
+              gwesp gwesp.decay  gwdegree gwdegree.decay
+Lag 0     1.0000000   1.0000000 1.0000000      1.0000000
+Lag 8192  0.3849638   0.2835238 0.5924417      0.6868686
+Lag 16384 0.2957333   0.1887309 0.4869144      0.5943467
+Lag 24576 0.2495615   0.1616260 0.4420159      0.5264822
+Lag 32768 0.1888801   0.1124390 0.4048733      0.4806834
+Lag 40960 0.1719058   0.0954005 0.3728944      0.4364297
+
+Sample statistics burn-in diagnostic (Geweke):
+Chain 1 
+
+Fraction in 1st window = 0.1
+Fraction in 2nd window = 0.5 
+
+         gwesp    gwesp.decay       gwdegree gwdegree.decay 
+        0.4037         0.4230        -0.2968         0.2077 
+
+Individual P-values (lower = worse):
+         gwesp    gwesp.decay       gwdegree gwdegree.decay 
+     0.6864315      0.6722599      0.7666007      0.8354596 
+Joint P-value (lower = worse):  0.7155141 .
+
+MCMC diagnostics shown here are from the last round of simulation, prior to computation of final parameter estimates. Because the final estimates are refinements of those used for this simulation run, these diagnostics may understate model performance. To directly assess the performance of the final model on in-model statistics, please use the GOF command: gof(ergmFitObject, GOF=~model).
+
+> dev.off()
+pdf 
+  2 
+
+> ## 2.3 GOF 
+> bfit.gof <- gof(bfit,control=control.gof.formula(nsim = nsim_gof)) #output simulate 
+
+> bfit.gof
+
+Goodness-of-fit for degree 
+
+         obs min mean max MC p-value
+degree0    1   0 1.02   3       1.00
+degree1    1   0 1.73   5       0.94
+degree2    1   0 2.19   8       0.70
+degree3    3   0 2.43   6       0.90
+degree4    3   0 3.35   7       1.00
+degree5    9   1 3.71   9       0.04
+degree6    3   1 4.36  12       0.78
+degree7    2   1 5.41  13       0.10
+degree8    5   1 6.07  11       0.76
+degree9    5   0 5.62  12       1.00
+degree10   6   0 4.98  12       0.80
+degree11   5   1 4.37  14       0.84
+degree12   0   0 3.42   8       0.10
+degree13   3   0 2.53   8       0.96
+degree14   5   0 2.07   7       0.10
+degree15   6   0 1.79   6       0.02
+degree16   3   0 1.28   4       0.32
+degree17   0   0 1.31   5       0.52
+degree18   0   0 0.84   3       0.76
+degree19   0   0 0.64   3       1.00
+degree20   0   0 0.47   3       1.00
+degree21   0   0 0.43   3       1.00
+degree22   0   0 0.29   3       1.00
+degree23   0   0 0.22   2       1.00
+degree24   0   0 0.19   2       1.00
+degree25   0   0 0.11   1       1.00
+degree26   0   0 0.05   1       1.00
+degree27   0   0 0.06   1       1.00
+degree28   0   0 0.03   1       1.00
+degree29   0   0 0.02   1       1.00
+degree30   0   0 0.01   1       1.00
+
+Goodness-of-fit for edgewise shared partner 
+
+      obs min  mean max MC p-value
+esp0    2   1  7.12  16       0.12
+esp1    9   4 12.19  24       0.54
+esp2   28  10 22.11  51       0.42
+esp3   34  16 33.97  58       1.00
+esp4   44  29 43.40  65       0.90
+esp5   36  19 44.36  68       0.44
+esp6   30  24 38.51  52       0.24
+esp7   36  12 28.13  46       0.24
+esp8   14   6 18.05  32       0.60
+esp9    9   5 11.51  23       0.64
+esp10  19   0  6.88  21       0.02
+esp11  10   0  3.61  11       0.06
+esp12   2   0  2.11   8       1.00
+esp13   1   0  1.17   4       1.00
+esp14   0   0  0.47   2       1.00
+esp15   0   0  0.26   3       1.00
+esp16   0   0  0.08   1       1.00
+esp17   0   0  0.03   1       1.00
+esp18   0   0  0.02   1       1.00
+esp19   0   0  0.02   1       1.00
+
+Goodness-of-fit for minimum geodesic distance 
+
+    obs min mean max MC p-value
+1   274 274  274 274          1
+2   498 498  498 498          1
+3   503 503  503 503          1
+4   326 326  326 326          1
+5   137 137  137 137          1
+6    27  27   27  27          1
+7     5   5    5   5          1
+Inf  60  60   60  60          1
+
+Goodness-of-fit for model statistics 
+
+            obs min  mean max MC p-value
+esp#1         9   4 12.19  24       0.54
+esp#2        28  10 22.11  51       0.42
+esp#3        34  16 33.97  58       1.00
+esp#4        44  29 43.40  65       0.90
+esp#5        36  19 44.36  68       0.44
+esp#6        30  24 38.51  52       0.24
+esp#7        36  12 28.13  46       0.24
+esp#8        14   6 18.05  32       0.60
+esp#9         9   5 11.51  23       0.64
+esp#10       19   0  6.88  21       0.02
+esp#11       10   0  3.61  11       0.06
+esp#12        2   0  2.11   8       1.00
+esp#13        1   0  1.17   4       1.00
+esp#14        0   0  0.47   2       1.00
+esp#15        0   0  0.26   3       1.00
+esp#16        0   0  0.08   1       1.00
+esp#17        0   0  0.03   1       1.00
+esp#18        0   0  0.02   1       1.00
+esp#19        0   0  0.02   1       1.00
+gwdegree#1    1   0  1.73   5       0.94
+gwdegree#2    1   0  2.19   8       0.70
+gwdegree#3    3   0  2.43   6       0.90
+gwdegree#4    3   0  3.35   7       1.00
+gwdegree#5    9   1  3.71   9       0.04
+gwdegree#6    3   1  4.36  12       0.78
+gwdegree#7    2   1  5.41  13       0.10
+gwdegree#8    5   1  6.07  11       0.76
+gwdegree#9    5   0  5.62  12       1.00
+gwdegree#10   6   0  4.98  12       0.80
+gwdegree#11   5   1  4.37  14       0.84
+gwdegree#12   0   0  3.42   8       0.10
+gwdegree#13   3   0  2.53   8       0.96
+gwdegree#14   5   0  2.07   7       0.10
+gwdegree#15   6   0  1.79   6       0.02
+gwdegree#16   3   0  1.28   4       0.32
+gwdegree#17   0   0  1.31   5       0.52
+gwdegree#18   0   0  0.84   3       0.76
+gwdegree#19   0   0  0.64   3       1.00
+gwdegree#20   0   0  0.47   3       1.00
+gwdegree#21   0   0  0.43   3       1.00
+gwdegree#22   0   0  0.29   3       1.00
+gwdegree#23   0   0  0.22   2       1.00
+gwdegree#24   0   0  0.19   2       1.00
+gwdegree#25   0   0  0.11   1       1.00
+gwdegree#26   0   0  0.05   1       1.00
+gwdegree#27   0   0  0.06   1       1.00
+gwdegree#28   0   0  0.03   1       1.00
+gwdegree#29   0   0  0.02   1       1.00
+gwdegree#30   0   0  0.01   1       1.00
+
+> pdf("output/gof.pdf")
+
+> plot(bfit.gof)
+
+> dev.off()
+pdf 
+  2 
+
+> #### 3 OUTPUT 
+> bfit.sim = simulate(bfit,nsim=nsim_gof)
+
+> save(bfit.sim, file=paste("output/sim_",nsim_gof,".rda", sep=""))
+
+> closeAllConnections()

@@ -1,0 +1,47 @@
+
+> print("Estimated values and covariance matrix:")
+[1] "Estimated values and covariance matrix:"
+
+> estimate = list(bfit$coefficients,bfit$covar)
+
+> print(estimate)
+[[1]]
+         gwesp    gwesp.decay       gwdegree gwdegree.decay 
+      1.146813       1.411279       2.737075       1.793829 
+
+[[2]]
+                      gwesp  gwesp.decay     gwdegree gwdegree.decay
+gwesp           0.020705789 -0.012922256 -0.007276977   -0.010437822
+gwesp.decay    -0.012922256  0.009078307  0.008382039    0.002670544
+gwdegree       -0.007276977  0.008382039  0.075972805   -0.045876355
+gwdegree.decay -0.010437822  0.002670544 -0.045876355    0.059319271
+
+
+> print("Summary of the fitting procedure:")
+[1] "Summary of the fitting procedure:"
+
+> summary(bfit)
+Call:
+ergm(formula = bnet ~ gwesp + gwdegree, constraints = ~edges, 
+    control = control.ergm(init = c(1, 1, 0.1, 1), MCMLE.maxit = 40))
+
+Monte Carlo Maximum Likelihood Results:
+
+               Estimate Std. Error MCMC % z value Pr(>|z|)    
+gwesp           1.14681    0.14393      0   7.968   <1e-04 ***
+gwesp.decay     1.41128    0.09531      0  14.808   <1e-04 ***
+gwdegree        2.73708    0.27580      0   9.924   <1e-04 ***
+gwdegree.decay  1.79383    0.24366      0   7.362   <1e-04 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+     Null Deviance:    0.0  on 1830  degrees of freedom
+ Residual Deviance: -561.4  on 1826  degrees of freedom
+ 
+Note that the null model likelihood and deviance are defined to be 0. This means that all likelihood-based inference
+(LRT, Analysis of Deviance, AIC, BIC, etc.) is only valid between models with the same reference distribution and
+constraints.
+
+AIC: -553.4  BIC: -531.3  (Smaller is better. MC Std. Err. = 1.227)
+
+> closeAllConnections()
